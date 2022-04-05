@@ -158,6 +158,7 @@ namespace K4AdotNet.Samples.Unity
             }
         }
 
+        //イベントで変更があったら呼ばれるスケルトンの情報が e 
         private void SkeletonProvider_SkeletonUpdated(object sender, SkeletonEventArgs e)
         {
             if (e.Skeleton == null)
@@ -167,6 +168,7 @@ namespace K4AdotNet.Samples.Unity
             }
             else
             {
+                //カリキュレーションArmパラメータ
                 RenderSkeleton(e.Skeleton.Value);
             }
         }
