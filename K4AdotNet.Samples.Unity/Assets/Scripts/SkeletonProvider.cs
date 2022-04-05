@@ -26,6 +26,7 @@ namespace K4AdotNet.Samples.Unity
             var task = Task.Run(() =>
             {
                 var initialized = Sdk.TryInitializeBodyTrackingRuntime(TrackerProcessingMode.GpuCuda, out var message);
+
                 return Tuple.Create(initialized, message);
             });
 
@@ -35,6 +36,7 @@ namespace K4AdotNet.Samples.Unity
             yield return new WaitUntil(() => task.IsCompleted);
 
             var isAvailable = false;
+
             try
             {
                 //<bool,string>のタプル型
@@ -121,6 +123,7 @@ namespace K4AdotNet.Samples.Unity
                         }
                         else
                         {
+                            //Emptyとは???
                             SkeletonUpdated?.Invoke(this, SkeletonEventArgs.Empty);
                         }
                     }

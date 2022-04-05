@@ -9,15 +9,16 @@ namespace K4AdotNet.Samples.Unity
         private Device _device;
 
         public bool IsInitializationComplete { get; private set; }
+
         //プロパティアクセサ = 式の結果を割り当てるか返すだけの1 行のステートメントで構成
         //プロパティは、式形式のメンバとして実装できる
         //式本体の定義は、=> 後、プロパティに割り当てるかプロパティから取得するための式を続けて構成
         // nullじゃなかったらtrueが入る
         public bool IsAvailable => _device != null;
-        public DeviceConfiguration Configuration { get; private set; }
-        public Calibration Calibration { get; private set; }
+        public DeviceConfiguration Configuration { get; private set; }  //Configuration = 構成
+        public Calibration Calibration { get; private set; }  //Calibration = 比べて正す
 
-        // event = C#のコールバック　登録する
+        // event = C#のコールバック　イベント変数の宣言
         // += 関数を登録 -= 関数を削除
         // delegate = 自分で作った関数
         public event EventHandler<CaptureEventArgs> CaptureReady;

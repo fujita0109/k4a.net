@@ -141,6 +141,7 @@ namespace K4AdotNet.Samples.Unity
         private void OnEnable()
         {
             var skeletonProvider = FindObjectOfType<SkeletonProvider>();
+
             if (skeletonProvider != null)
             {
                 skeletonProvider.SkeletonUpdated += SkeletonProvider_SkeletonUpdated;
@@ -150,6 +151,7 @@ namespace K4AdotNet.Samples.Unity
         private void OnDisable()
         {
             var skeletonProvider = FindObjectOfType<SkeletonProvider>();
+
             if (skeletonProvider != null)
             {
                 skeletonProvider.SkeletonUpdated -= SkeletonProvider_SkeletonUpdated;
@@ -160,6 +162,7 @@ namespace K4AdotNet.Samples.Unity
         {
             if (e.Skeleton == null)
             {
+                //引数がEnptyだったらここに来る
                 //HideSkeleton();
             }
             else
@@ -189,6 +192,7 @@ namespace K4AdotNet.Samples.Unity
         {
             var parentPos = ConvertKinectPos(skeleton[bone.ParentJoint].PositionMm);
             var direction = ConvertKinectPos(skeleton[bone.ChildJoint].PositionMm) - parentPos;
+
             bone.Transform.localPosition = parentPos;
             bone.Transform.localScale = new Vector3(1, direction.magnitude, 1);
             bone.Transform.localRotation = UnityEngine.Quaternion.FromToRotation(Vector3.up, direction);
@@ -201,6 +205,7 @@ namespace K4AdotNet.Samples.Unity
             var earPosL = ConvertKinectPos(skeleton[JointType.EarLeft].PositionMm);
             var headCenter = 0.5f * (earPosR + earPosL);
             var d = (earPosR - earPosL).magnitude;
+
             _head.localPosition = headCenter;
             _head.localRotation = UnityEngine.Quaternion.FromToRotation(Vector3.up, headCenter - headPos);
             _head.localScale = new Vector3(d, 2 * (headCenter - headPos).magnitude, d);

@@ -175,8 +175,10 @@ namespace K4AdotNet.Samples.Unity
         private void OnEnable()
         {
             var skeletonProvider = FindObjectOfType<SkeletonProvider>();
+
             if (skeletonProvider != null)
             {
+                //イベントの登録
                 skeletonProvider.SkeletonUpdated += SkeletonProvider_SkeletonUpdated;
             }
         }
@@ -184,8 +186,10 @@ namespace K4AdotNet.Samples.Unity
         private void OnDisable()
         {
             var skeletonProvider = FindObjectOfType<SkeletonProvider>();
+
             if (skeletonProvider != null)
             {
+                //イベントの削除
                 skeletonProvider.SkeletonUpdated -= SkeletonProvider_SkeletonUpdated;
             }
         }
@@ -207,11 +211,13 @@ namespace K4AdotNet.Samples.Unity
         {
             var joints = JointTypes.All;
             var characterPos = ConvertKinectPos(skeleton.Pelvis.PositionMm);
+
             transform.localPosition = characterPos;
 
             foreach (var joint in joints)
             {
                 var data = _joints[joint];
+
                 if (data != null)
                 {
                     var orientation = ConvertKinectQ(skeleton[joint].Orientation);
@@ -225,6 +231,7 @@ namespace K4AdotNet.Samples.Unity
                     var rotationInCharacterSpace = rotationRel2TPoseInCharacterSpace * data.TPoseOrientation;
                     var invParentRotationInCharacterSpace = Quaternion.identity;
                     var t = data.Transform;
+
                     while (!ReferenceEquals(t, _rootJointTransform))
                     {
                         t = t.parent;

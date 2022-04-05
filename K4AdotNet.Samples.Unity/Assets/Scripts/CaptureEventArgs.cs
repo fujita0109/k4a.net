@@ -3,7 +3,7 @@ using System;
 
 namespace K4AdotNet.Samples.Unity
 {
-    //キャプチャークラスを受け取るのみ
+    //イベントでキャプチャークラスを受け取るのみ
     public class CaptureEventArgs : EventArgs
     {
         public CaptureEventArgs(Capture capture)
