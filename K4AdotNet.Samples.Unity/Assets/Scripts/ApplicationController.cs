@@ -8,9 +8,7 @@ namespace K4AdotNet.Samples.Unity
         private ErrorMessage _errorMessage;
         private GameObject _skeleton;
         private GameObject _character;
-
-        //追加
-        private GameObject _2DArm;
+        //private GameObject _arm;  //追加
 
         private GameObject _modes;
 
@@ -23,7 +21,7 @@ namespace K4AdotNet.Samples.Unity
             _character = GetComponentInChildren<CharacterAnimator>(includeInactive: true)?.gameObject;
 
             //追加
-            //_2DArm = GetComponentInChildren<CharacterAnimator>(includeInactive: true)?.gameObject;
+            //_arm = GetComponentInChildren<ArmRenderer>(includeInactive: true)?.gameObject;
 
             //一番重たい　ヒエラルキー全て探す
             _modes = GameObject.Find("Modes");
@@ -78,9 +76,9 @@ namespace K4AdotNet.Samples.Unity
             _character?.SetActive(isActive);
         }
 
-        public void On2DArmModeToggled(bool isActive)
+        public void OnArmModeToggled(bool isActive)
         {
-            //_character?.SetActive(isActive);
+          // _arm?.SetActive(isActive);
         }
 
     }
