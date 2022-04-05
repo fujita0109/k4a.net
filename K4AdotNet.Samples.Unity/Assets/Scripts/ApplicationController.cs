@@ -8,15 +8,22 @@ namespace K4AdotNet.Samples.Unity
         private ErrorMessage _errorMessage;
         private GameObject _skeleton;
         private GameObject _character;
+
+        //追加
+        private GameObject _2DArm;
+
         private GameObject _modes;
 
         private void Awake()
         {
             //クラス名がわかっているから
             _errorMessage = FindObjectOfType<ErrorMessage>();
-            //自分と子供から探す
+            //自分と子供から探す ???この引数は？
             _skeleton = GetComponentInChildren<SkeletonRenderer>(includeInactive: true)?.gameObject;
             _character = GetComponentInChildren<CharacterAnimator>(includeInactive: true)?.gameObject;
+
+            //追加
+            //_2DArm = GetComponentInChildren<CharacterAnimator>(includeInactive: true)?.gameObject;
 
             //一番重たい　ヒエラルキー全て探す
             _modes = GameObject.Find("Modes");
@@ -70,5 +77,11 @@ namespace K4AdotNet.Samples.Unity
         {
             _character?.SetActive(isActive);
         }
+
+        public void On2DArmModeToggled(bool isActive)
+        {
+            //_character?.SetActive(isActive);
+        }
+
     }
 }
