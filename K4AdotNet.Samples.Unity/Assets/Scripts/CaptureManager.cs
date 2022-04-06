@@ -61,6 +61,7 @@ namespace K4AdotNet.Samples.Unity
                 //out演算子 = 参照渡し 引数で変数を宣言できる
                 if (_device.TryGetCapture(out var capture))
                 {
+
                     //勝手に呼ばれるDispose
                     using (capture)
                     {

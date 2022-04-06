@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace SGSample
+namespace K4AdotNet.Samples.Unity
 {
     public class ArmRenderer : MonoBehaviour
     {
@@ -17,6 +17,28 @@ namespace SGSample
         private float armY;
 
         private float time = 0.0f;
+
+        private void OnEnable()
+        {
+            var skeletonProvider = FindObjectOfType<SkeletonProvider>();
+
+            if (skeletonProvider != null)
+            {
+                //イベントの登録
+                skeletonProvider.SkeletonUpdated += SkeletonProvider_SkeletonUpdated;
+            }
+        }
+
+        private void OnDisable()
+        {
+            var skeletonProvider = FindObjectOfType<SkeletonProvider>();
+
+            if (skeletonProvider != null)
+            {
+                //イベントの削除
+                skeletonProvider.SkeletonUpdated -= SkeletonProvider_SkeletonUpdated;
+            }
+        }
 
         private void Start()
         {
@@ -50,6 +72,23 @@ namespace SGSample
                 armImage.rectTransform.anchoredPosition = new Vector2(armStartX, armY);
                 
                 time = 0.0f;
+            }
+        }
+
+
+        //Kinectの情報を取ってくる
+        private void SkeletonProvider_SkeletonUpdated(object sender, SkeletonEventArgs e)
+        {
+
+            //引数のeにスケルトンの情報
+
+            if (e.Skeleton != null)
+            {
+                //this.gameObject..SetActive(true);
+            }
+            else
+            {
+                //_skin?.SetActive(false);
             }
         }
     }

@@ -8,7 +8,7 @@ namespace K4AdotNet.Samples.Unity
         private ErrorMessage _errorMessage;
         private GameObject _skeleton;
         private GameObject _character;
-        //private GameObject _arm;  //追加
+        private GameObject _arm;  //追加
 
         private GameObject _modes;
 
@@ -21,7 +21,7 @@ namespace K4AdotNet.Samples.Unity
             _character = GetComponentInChildren<CharacterAnimator>(includeInactive: true)?.gameObject;
 
             //追加
-            //_arm = GetComponentInChildren<ArmRenderer>(includeInactive: true)?.gameObject;
+            _arm = GetComponentInChildren<ArmRenderer>(includeInactive: true)?.gameObject;
 
             //一番重たい　ヒエラルキー全て探す
             _modes = GameObject.Find("Modes");
@@ -52,6 +52,16 @@ namespace K4AdotNet.Samples.Unity
                     "Cannot initialize Azure Kinect Body Tracking runtime.\n" +
                     "Make sure that there are the following files in Assets\\Plugins\\K4AdotNet folder:\n" +
                     "1. k4abt.dll\n2. dnn_model_2_0_op11.onnx\n3. cublas64_11.dll\n4. cublasLt64_11.dll\n5. cudart64_110.dll\n6. cudnn_cnn_infer64_8.dll\n7. cudnn_ops_infer64_8.dll\n8. cudnn64_8.dll\n9. cufft64_10.dll\n10. onnxruntime.dll\n11. vcomp140.dll");
+                yield break;
+            }
+
+            var armProvider = FindObjectOfType<ArmProvider>();
+
+            yield return new WaitUntil(() => armProvider?.IsInitializationComplete != false);
+
+            if(armProvider?.IsAvailable != true)
+            {
+                _errorMessage.Show("腕の初期化が終わっていない");
                 yield break;
             }
 

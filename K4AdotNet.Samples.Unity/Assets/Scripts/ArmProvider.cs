@@ -1,4 +1,4 @@
-﻿#if false
+﻿#if true
 using K4AdotNet.BodyTracking;
 using System;
 using System.Collections;
@@ -95,6 +95,7 @@ namespace K4AdotNet.Samples.Unity
             _tracker?.Dispose();
         }
 
+        //怪しい
         private void CaptureManager_CaptureReady(object sender, CaptureEventArgs e)
         {
             if (IsAvailable)
