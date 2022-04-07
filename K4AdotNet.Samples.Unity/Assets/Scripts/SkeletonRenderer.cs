@@ -36,15 +36,20 @@ namespace K4AdotNet.Samples.Unity
                 return new Bone(childJoint.GetParent(), childJoint);
             }
 
+
+            //親と子のpositionの中間地点を計算することでシリンダーの
             public Bone(JointType parentJoint, JointType childJoint)
             {
                 ParentJoint = parentJoint;
                 ChildJoint = childJoint;
 
                 var pos = new GameObject();
+
                 pos.name = $"{parentJoint}->{childJoint}:pos";
 
+                //シリンダーを作成
                 var bone = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+
                 bone.name = $"{parentJoint}->{childJoint}:bone";
                 bone.transform.parent = pos.transform;
                 bone.transform.localScale = new Vector3(0.033f, 0.5f, 0.033f);
@@ -58,39 +63,51 @@ namespace K4AdotNet.Samples.Unity
             public Transform Transform { get; }
         }
 
+
+
+
+
         private void CreateJoints()
         {
-            //ジョイントは球としてレンダリング
+            //ジョイント(関節)は球としてレンダリング
+            //ToDictionaryメソッドは即時評価
             _joints = JointTypes.All.ToDictionary(
                     jt => jt,
                     jt =>
                     {
+                        //球のゲームオブジェクトを作成
                         var joint = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+
                         joint.name = jt.ToString();
                         joint.transform.parent = _root.transform;
-                        joint.transform.localScale = 0.075f * Vector3.one;
+
+                        //joint.transform.localScale = 0.075f * Vector3.one;
+                        joint.transform.localScale = (0.075f * Vector3.one) * 0.5f;
+
                         return joint.transform;
                     });
 
             //デフォルトの色として緑を設定
             SetJointColor(Color.green, typeof(JointType).GetEnumValues().Cast<JointType>().ToArray());
 
-            //一部のジョイントのサイズを少し小さく設定します
+            //一部の関節のサイズを少し小さく設定
             SetJointScale(0.05f, JointType.Neck, JointType.Head, JointType.ClavicleLeft, JointType.ClavicleRight, JointType.EarLeft, JointType.EarRight);
 
-            //顔の関節のサイズと特定の色を大幅に縮小して設定します
-            SetJointScale(0.033f, JointType.EyeLeft, JointType.EyeRight, JointType.Nose);
+            //顔の関節のサイズと特定の色を大幅に縮小して設定
+            SetJointScale(0.03f, JointType.EyeLeft, JointType.EyeRight, JointType.Nose);
             SetJointColor(Color.cyan, JointType.EyeLeft, JointType.EyeRight);
             SetJointColor(Color.magenta, JointType.Nose);
             SetJointColor(Color.yellow, JointType.EarLeft, JointType.EarRight);
         }
 
+        //大きさ
         private void SetJointScale(float scale, params JointType[] jointTypes)
         {
             foreach (var jt in jointTypes)
                 _joints[jt].localScale = scale * Vector3.one;
         }
 
+        //色
         private void SetJointColor(Color color, params JointType[] jointTypes)
         {
             foreach (var jt in jointTypes)
@@ -156,6 +173,7 @@ namespace K4AdotNet.Samples.Unity
             }
         }
 
+        //(Skeltonクラス) 引数で体の情報が渡って来た)
         private void SkeletonProvider_SkeletonUpdated(object sender, SkeletonEventArgs e)
         {
             if (e.Skeleton == null)
@@ -185,10 +203,13 @@ namespace K4AdotNet.Samples.Unity
             _root.SetActive(true);
         }
 
+        //改造する
         private static void PositionBone(Bone bone, Skeleton skeleton)
         {
             var parentPos = ConvertKinectPos(skeleton[bone.ParentJoint].PositionMm);
             var direction = ConvertKinectPos(skeleton[bone.ChildJoint].PositionMm) - parentPos;
+
+
             bone.Transform.localPosition = parentPos;
             bone.Transform.localScale = new Vector3(1, direction.magnitude, 1);
             bone.Transform.localRotation = UnityEngine.Quaternion.FromToRotation(Vector3.up, direction);
@@ -201,6 +222,7 @@ namespace K4AdotNet.Samples.Unity
             var earPosL = ConvertKinectPos(skeleton[JointType.EarLeft].PositionMm);
             var headCenter = 0.5f * (earPosR + earPosL);
             var d = (earPosR - earPosL).magnitude;
+
             _head.localPosition = headCenter;
             _head.localRotation = UnityEngine.Quaternion.FromToRotation(Vector3.up, headCenter - headPos);
             _head.localScale = new Vector3(d, 2 * (headCenter - headPos).magnitude, d);

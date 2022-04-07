@@ -8,7 +8,7 @@ namespace K4AdotNet.Samples.Unity
 {
     public class SkeletonProvider : MonoBehaviour, IInitializable
     {
-        private Tracker _tracker;
+        private Tracker _tracker;  //Kinectの変動する情報を取ってくる
 
         public bool IsInitializationComplete { get; private set; }
         public bool IsAvailable { get; private set; }
