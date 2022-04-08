@@ -37,7 +37,7 @@ namespace K4AdotNet.Samples.Unity
             }
 
 
-            //親と子のpositionの中間地点を計算することでシリンダーの
+            //親と子のpositionの中間地点を計算することでシリンダーの位置がわかる
             public Bone(JointType parentJoint, JointType childJoint)
             {
                 ParentJoint = parentJoint;
@@ -53,6 +53,9 @@ namespace K4AdotNet.Samples.Unity
                 bone.name = $"{parentJoint}->{childJoint}:bone";
                 bone.transform.parent = pos.transform;
                 bone.transform.localScale = new Vector3(0.033f, 0.5f, 0.033f);
+
+                //new Vector3(0,0.5,0);
+                //new Vector3(0,0,0)にすると関節にシリンダーの真ん中が来る
                 bone.transform.localPosition = 0.5f * Vector3.up;
 
                 Transform = pos.transform;
@@ -64,21 +67,21 @@ namespace K4AdotNet.Samples.Unity
         }
 
 
-
-
-
         private void CreateJoints()
         {
             //ジョイント(関節)は球としてレンダリング
-            //ToDictionaryメソッドは即時評価
+            //シーケンス = 操作対象のデータ
+            //ToDictionaryメソッドは即時評価 シーケンスからDictionary<Tkey,Tvalue>を作成
             _joints = JointTypes.All.ToDictionary(
-                    jt => jt,
-                    jt =>
+                    jt => jt,jt =>
                     {
                         //球のゲームオブジェクトを作成
                         var joint = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
+                        //JointTypeのenum名前
                         joint.name = jt.ToString();
+
+                        //トランスフォームの親に rootのトランスフォーム (0,0,0)
                         joint.transform.parent = _root.transform;
 
                         //joint.transform.localScale = 0.075f * Vector3.one;

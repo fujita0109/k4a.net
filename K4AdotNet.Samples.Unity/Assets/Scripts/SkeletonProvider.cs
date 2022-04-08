@@ -23,6 +23,7 @@ namespace K4AdotNet.Samples.Unity
             //() =>と、空の括弧を書けば引数無しという扱い
             //C#のTaskクラス 非同期処理操作
             //同期処理をまとめてタスクを作り、別スレッドで実行する
+            //初期化
             var task = Task.Run(() =>
             {
                 var initialized = Sdk.TryInitializeBodyTrackingRuntime(TrackerProcessingMode.GpuCuda, out var message);
@@ -31,16 +32,18 @@ namespace K4AdotNet.Samples.Unity
 
 
             //WaitUntil = 条件がtrueになったら進む
-            //c#
             yield return new WaitUntil(() => task.IsCompleted);
 
             var isAvailable = false;
+
             try
             {
+                //task.Result = 結果値を取得
                 //<bool,string>のタプル型
                 var result = task.Result;
 
                 isAvailable = result.Item1;
+
                 if (!isAvailable)
                 {
                     Debug.Log($"Cannot initialize body tracking: {result.Item2}");
