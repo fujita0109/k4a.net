@@ -11,6 +11,7 @@ namespace K4AdotNet.Samples.Unity
         void Start()
         {
             var captureManager = FindObjectOfType<CaptureManager>();
+
             if (captureManager?.IsAvailable == true)
             {
                 var frameWidth = captureManager.Configuration.ColorResolution.WidthPixels();
@@ -28,6 +29,7 @@ namespace K4AdotNet.Samples.Unity
         private void OnDestroy()
         {
             var captureManager = FindObjectOfType<CaptureManager>();
+
             if (captureManager != null) captureManager.CaptureReady -= CaptureManager_CaptureReady;
             Destroy(_texture);
         }
