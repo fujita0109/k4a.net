@@ -29,7 +29,8 @@ namespace K4AdotNet.Samples.Unity
         private IReadOnlyCollection<Bone> _bones;
         private Transform _head;
 
-        private class Bone
+        //独自の階層構造を作るのに参照が必要なのでprivateからpublicに変更
+        public class Bone
         {
             public static Bone FromChildJoint(JointType childJoint)
             {
@@ -72,6 +73,7 @@ namespace K4AdotNet.Samples.Unity
             //ジョイント(関節)は球としてレンダリング
             //シーケンス = 操作対象のデータ
             //ToDictionaryメソッドは即時評価 シーケンスからDictionary<Tkey,Tvalue>を作成
+            //一個一個のenumに処理が書ける
             _joints = JointTypes.All.ToDictionary(
                     jt => jt,jt =>
                     {
