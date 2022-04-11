@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using SG;
 
 namespace K4AdotNet.Samples.Unity
 {
@@ -15,7 +16,7 @@ namespace K4AdotNet.Samples.Unity
             //クラス名がわかっているから
             _errorMessage = FindObjectOfType<ErrorMessage>();
             //自分と子供から探す
-            _skeleton = GetComponentInChildren<SkeletonRenderer>(includeInactive: true)?.gameObject;
+            _skeleton = GetComponentInChildren<SGSkeletonRenderer>(includeInactive: true)?.gameObject;
             _character = GetComponentInChildren<CharacterAnimator>(includeInactive: true)?.gameObject;
 
             //一番重たい　ヒエラルキー全て探す
