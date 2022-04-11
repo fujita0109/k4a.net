@@ -41,40 +41,84 @@ namespace SG
         #region Render objects
 
         //1層
-        private GameObject _root;
+        static private GameObject _root;
         //2層
-        private GameObject _hipRoot;
-        private GameObject _ribsRoot;
+        static private GameObject _hipRoot;
+        static private GameObject _ribsRoot;
 
         //hip～
-        private GameObject _leftThigh;
-        private GameObject _rightThigh;
+        static private GameObject _leftThighRoot;
+        static private GameObject _rightThighRoot;
 
-        private GameObject _leftKnee;
-        private GameObject _rightKnee;
+        static private GameObject _leftKneeRoot;
+        static private GameObject _rightKneeRoot;
 
-        private GameObject _leftAnkle;
-        private GameObject _rightAnkle;
+        static private GameObject _leftAnkleRoot;
+        static private GameObject _rightAnkleRoot;
 
-        private GameObject _leftToe;
-        private GameObject _rightToe;
+        static private GameObject _leftToeRoot;
+        static private GameObject _rightToeRoot;
 
         //rigs～
-        private GameObject _leftShoulderRoot;
-        private GameObject _rightShoulderRoot;
+        static private GameObject _leftShoulderRoot;
+        static private GameObject _rightShoulderRoot;
 
-        private GameObject _leftUpperArmRoot;
-        private GameObject _rightUpperArmRoot;
+        static private GameObject _leftUpperArmRoot;
+        static private GameObject _rightUpperArmRoot;
 
-        private GameObject _leftForearmRoot;
-        private GameObject _rightForearmRoot;
+        static private GameObject _leftForearmRoot;
+        static private GameObject _rightForearmRoot;
 
-        private GameObject _leftWristRoot;
-        private GameObject _rightWristRoot;
+        static private GameObject _leftWristRoot;
+        static private GameObject _rightWristRoot;
 
-        private GameObject _neckRoot;
-        private GameObject _headRoot;
+        static private GameObject _neckRoot;
+        static private GameObject _headRoot;
 
+        //もし階層構造が
+        private Dictionary<JointType, GameObject> _mapRootJoint = new Dictionary<JointType, GameObject>(){
+            {JointType.Pelvis,_hipRoot },
+            {JointType.SpineChest,_ribsRoot },
+
+            {JointType.Neck,_neckRoot },
+            {JointType.ClavicleLeft,_leftShoulderRoot },
+            {JointType.ShoulderLeft,_leftUpperArmRoot },
+            {JointType.ElbowLeft,_leftForearmRoot },
+            {JointType.WristLeft,_leftWristRoot },
+           // {JointType.HandLeft },
+            //{JointType.HandTipLeft},
+            //{JointType.ThumbLeft},
+
+            {JointType.ClavicleRight,_rightShoulderRoot },
+            {JointType.ShoulderRight,_rightUpperArmRoot },
+            {JointType.ElbowRight,_rightForearmRoot },
+            {JointType.WristRight,_rightWristRoot },
+            //{JointType.HandRight },
+            //{JointType.HandTipRight},
+            //{JointType.ThumbRight },
+
+            {JointType.HipLeft,_leftThighRoot },
+            {JointType.KneeLeft,_leftKneeRoot },
+            {JointType.AnkleLeft,_leftAnkleRoot },
+            {JointType.FootLeft,_leftToeRoot },
+
+            {JointType.HipRight,_rightThighRoot },
+            {JointType.KneeRight,_rightKneeRoot },
+            {JointType.AnkleRight,_rightAnkleRoot },
+            {JointType.FootRight,_rightToeRoot },
+
+            {JointType.Head,_headRoot },
+
+            //顔部分
+            //{JointType.Nose},
+            //{JointType.EyeLeft,_leftWristRoot },
+            //{JointType.EarLeft,_leftWristRoot },
+            //{JointType.EyeRight,_leftWristRoot },
+            //{JointType.EarRight,_leftWristRoot },
+        };
+
+        //キーと値のペアの読み取り専用ジェネリック コレクションを表す
+        //CreateJointでラムダで値を入れている
         private IReadOnlyDictionary<JointType, Transform> _joints;
         private IReadOnlyCollection<Bone> _bones;
         private Transform _head;
@@ -123,7 +167,7 @@ namespace SG
             //ジョイント(関節)は球としてレンダリング
             //シーケンス = 操作対象のデータ
             //ToDictionaryメソッドは即時評価 シーケンスからDictionary<Tkey,Tvalue>を作成
-            //一個一個のenumに処理が書ける
+            //一個一個(JointType)のenumに処理が書ける
             _joints = JointTypes.All.ToDictionary(
                     jt => jt, jt =>
                     {
@@ -134,7 +178,12 @@ namespace SG
                         joint.name = jt.ToString();
 
                         //トランスフォームの親に rootのトランスフォーム (0,0,0)
-                        joint.transform.parent = _root.transform;
+                        //joint.transform.parent = _root.transform;
+
+                        //親の指定
+                        var jointRoot = _mapRootJoint[jt];
+
+                        joint.transform.SetParent(jointRoot.transform);
 
                         //joint.transform.localScale = 0.075f * Vector3.one;
                         joint.transform.localScale = (0.075f * Vector3.one) * 0.5f;
@@ -173,6 +222,8 @@ namespace SG
         private void CreateHipFollowing()
         {
             SGBone hip = new SGBone();
+
+
 
         }
 
@@ -326,15 +377,15 @@ namespace SG
             //hip以下のroot
             SetRootChild(ref _hipRoot, ref _root, "_hip:root");
             //left
-            SetRootChild(ref _leftThigh, ref _hipRoot, "leftThigh:root");
-            SetRootChild(ref _leftKnee, ref _leftThigh, "leftKnee:root");
-            SetRootChild(ref _leftAnkle, ref _leftKnee, "leftAnkle:root");
-            SetRootChild(ref _leftToe, ref _leftAnkle, "leftToe:root");
+            SetRootChild(ref _leftThighRoot, ref _hipRoot, "leftThigh:root");
+            SetRootChild(ref _leftKneeRoot, ref _leftThighRoot, "leftKnee:root");
+            SetRootChild(ref _leftAnkleRoot, ref _leftKneeRoot, "leftAnkle:root");
+            SetRootChild(ref _leftToeRoot, ref _leftAnkleRoot, "leftToe:root");
             //right
-            SetRootChild(ref _rightThigh, ref _hipRoot, "rightThigh:root");
-            SetRootChild(ref _rightKnee, ref _rightThigh, "rightThigh:root");
-            SetRootChild(ref _rightAnkle, ref _rightKnee, "rightThigh:root");
-            SetRootChild(ref _rightToe, ref _rightAnkle, "rightThigh:root");
+            SetRootChild(ref _rightThighRoot, ref _hipRoot, "rightThigh:root");
+            SetRootChild(ref _rightKneeRoot, ref _rightThighRoot, "rightThigh:root");
+            SetRootChild(ref _rightAnkleRoot, ref _rightKneeRoot, "rightThigh:root");
+            SetRootChild(ref _rightToeRoot, ref _rightAnkleRoot, "rightThigh:root");
 
             //ribs以下のroot
             SetRootChild(ref _ribsRoot, ref _root, "_ribs:root");

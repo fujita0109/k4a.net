@@ -10,8 +10,6 @@ namespace SG
     //複数のクラスで共有する値なら、その値をクラス定義してインスタンスを共有するといい
     public class SGBone : MonoBehaviour
     {
-        //var pos = new GameObject();
-
         public class SGJoint
         {
             public JointType Type { set; get; }
