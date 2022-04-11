@@ -119,6 +119,10 @@ namespace K4AdotNet.Samples.Unity
                 _joints[jt].GetComponent<Renderer>().material.color = color;
         }
 
+        //=========================================
+        //=========================================
+        //Bone作成
+
         private void CreateBones()
         {
             var bones = new List<Bone>();

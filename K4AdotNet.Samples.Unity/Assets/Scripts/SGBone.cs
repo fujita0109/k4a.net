@@ -6,6 +6,9 @@ using K4AdotNet.Samples.Unity;
 
 namespace SG
 {
+
+    //C# では値を保持するクラスを作り、そのインスタンスを渡すのが良い
+    //複数のクラスで共有する値なら、その値をクラス定義してインスタンスを共有するといい
     public class SGBone : MonoBehaviour
     {
         public class SGJoint
