@@ -25,13 +25,14 @@ namespace SG
 
         private void Awake()
         {
+            
             _root = new GameObject();
             _root.name = "skeleton:sgRoot";
             _root.transform.parent = transform;
             _root.transform.localScale = Vector3.one;
             _root.transform.localPosition = Vector3.zero;
             _root.SetActive(false);
-
+            
             CreateRoot();
             CreateJoints();
         }
@@ -39,7 +40,8 @@ namespace SG
         #region Render objects
 
         //1ëw
-        static private GameObject _root;
+        //static private GameObject _root;
+        /*
         //2ëw
         static private GameObject _hipRoot;
         static private GameObject _ribsRoot;
@@ -90,8 +92,112 @@ namespace SG
         static private GameObject _leftEarRoot;
         static private GameObject _rightEarRoot;
 
+        */
+        static private GameObject _root;
+        static private SGBone _hipRoot;
+        static private SGBone _ribsRoot;
+        static private SGBone _spineChestRoot;
+
+        //hipÅ`
+        static private SGBone _leftThighRoot;
+        static private SGBone _rightThighRoot;
+
+        static private SGBone _leftKneeRoot;
+        static private SGBone _rightKneeRoot;
+
+        static private SGBone _leftAnkleRoot;
+        static private SGBone _rightAnkleRoot;
+
+        static private SGBone _leftToeRoot;
+        static private SGBone _rightToeRoot;
+
+        //rigsÅ`
+
+        static private SGBone _leftShoulderRoot;
+        static private SGBone _rightShoulderRoot;
+
+        static private SGBone _leftUpperArmRoot;
+        static private SGBone _rightUpperArmRoot;
+
+        static private SGBone _leftForearmRoot;
+        static private SGBone _rightForearmRoot;
+
+        static private SGBone _leftWristRoot;
+        static private SGBone _rightWristRoot;
+
+        static private SGBone _neckRoot;
+        static private SGBone _headRoot;
+
+        //hand
+        static private SGBone _leftHandRoot;
+        static private SGBone _leftTipRoot;
+        static private SGBone _leftThumbRoot;
+
+        static private SGBone _rightHandRoot;
+        static private SGBone _rightTipRoot;
+        static private SGBone _rightThumbRoot;
+
+        //äÁ
+        static private SGBone _noseRoot;
+        static private SGBone _leftEyeRoot;
+        static private SGBone _rightEyeRoot;
+        static private SGBone _leftEarRoot;
+        static private SGBone _rightEarRoot;
+
+        private void CreateRoot()
+        {
+            _hipRoot = new SGBone(_root.gameObject, "hip:root");
+            _ribsRoot = new SGBone(_root.gameObject, "ribs:root");
+            _spineChestRoot = new SGBone(_root.gameObject, "spine:root");
+
+            //hipÅ`
+            _leftThighRoot = new SGBone(_hipRoot.MyGameObject(), "leftThigh:root");
+            _rightThighRoot = new SGBone(_hipRoot.MyGameObject(), "rightThigh:root");
+
+            _leftKneeRoot = new SGBone(_leftThighRoot.MyGameObject(), "leftKnee:root");
+            _rightKneeRoot = new SGBone(_rightThighRoot.MyGameObject(), "rightKnee:root");
+
+            _leftAnkleRoot = new SGBone(_leftKneeRoot.gameObject, "leftAnkle:root");
+            _rightAnkleRoot = new SGBone(_rightKneeRoot.gameObject, "rightAnkle:root");
+
+            _leftToeRoot = new SGBone(_leftAnkleRoot.gameObject, "leftToe:root");
+            _rightToeRoot = new SGBone(_rightAnkleRoot.gameObject, "rightToe:root");
+
+            //rigsÅ`
+            _leftShoulderRoot = new SGBone(_ribsRoot.gameObject, "hip:root");
+            _rightShoulderRoot = new SGBone(_ribsRoot.gameObject, "hip:root");
+
+            _leftUpperArmRoot = new SGBone(_leftShoulderRoot.gameObject, "hip:root");
+            _rightUpperArmRoot = new SGBone(_rightShoulderRoot.gameObject, "hip:root");
+
+            _leftForearmRoot = new SGBone(_leftUpperArmRoot.gameObject, "hip:root");
+            _rightForearmRoot = new SGBone(_rightUpperArmRoot.gameObject, "hip:root");
+
+            _leftWristRoot = new SGBone(_leftForearmRoot.gameObject, "hip:root");
+            _rightWristRoot = new SGBone(_rightForearmRoot.gameObject, "hip:root");
+
+            _neckRoot = new SGBone(_ribsRoot.gameObject, "hip:root");
+            _headRoot = new SGBone(_headRoot.gameObject, "hip:root");
+
+            //hand
+            _leftHandRoot = new SGBone(_leftWristRoot.gameObject, "hip:root");
+            _leftTipRoot = new SGBone(_leftWristRoot.gameObject, "hip:root");
+            _leftThumbRoot = new SGBone(_leftWristRoot.gameObject, "hip:root");
+
+            _rightHandRoot = new SGBone(_rightWristRoot.gameObject, "hip:root");
+            _rightTipRoot = new SGBone(_rightWristRoot.gameObject, "hip:root");
+            _rightThumbRoot = new SGBone(_rightWristRoot.gameObject, "hip:root");
+
+            //äÁ
+            _noseRoot = new SGBone(_headRoot.gameObject, "hip:root");
+            _leftEyeRoot = new SGBone(_headRoot.gameObject, "hip:root");
+            _rightEyeRoot = new SGBone(_headRoot.gameObject, "hip:root");
+            _leftEarRoot = new SGBone(_headRoot.gameObject, "hip:root");
+            _rightEarRoot = new SGBone(_headRoot.gameObject, "hip:root");
+        }
+
         //Ç‡ÇµäKëwç\ë¢Ç™
-        private Dictionary<JointType, GameObject> _mapRootJoint = new Dictionary<JointType,GameObject>(){
+        private Dictionary<JointType, SGBone> _mapRootJoint = new Dictionary<JointType, SGBone>(){
             {JointType.Pelvis,_hipRoot },
             {JointType.SpineChest,_ribsRoot },
             {JointType.SpineNavel,_spineChestRoot },
@@ -177,7 +283,6 @@ namespace SG
             public Transform Transform { get; }
         }
 
-
         private void CreateJoints()
         {
             //ÉWÉáÉCÉìÉg(ä÷êﬂ)ÇÕãÖÇ∆ÇµÇƒÉåÉìÉ_ÉäÉìÉO
@@ -201,7 +306,7 @@ namespace SG
                         var jointRoot = _mapRootJoint[jt];
 
                         //joint.transform.SetParent(jointRoot.transform);
-                        joint.transform.parent = jointRoot.transform;
+                        joint.transform.parent = jointRoot.GetParent().transform;
 
                         //joint.transform.localScale = 0.075f * Vector3.one;
                         joint.transform.localScale = (0.075f * Vector3.one) * 0.5f;
@@ -335,7 +440,7 @@ namespace SG
 
             PositionHead(skeleton);
 
-            _root.SetActive(true);
+            _root.gameObject.SetActive(true);
         }
 
         //â¸ë¢Ç∑ÇÈ
@@ -376,9 +481,10 @@ namespace SG
         private void HideSkeleton()
         {
             //êeÇ™falseÇ…Ç»Ç¡ÇΩÇÁéqãüÇ‡ëSÇƒfalseÇ…Ç»ÇÈ
-            _root.SetActive(false);
+            _root.gameObject.SetActive(false);
         }
 
+        /*
         private void CreateRoot()
         {
             //hipà»â∫ÇÃroot
@@ -426,6 +532,12 @@ namespace SG
             SetRootChild(ref _rightEarRoot, ref _headRoot, "rightEarRoot:root");
 
             SetRootChild(ref _spineChestRoot, ref _root, "spineChestRoot:root");
+        }
+        */
+
+        private void CreateParent()
+        {
+
         }
     }
 }

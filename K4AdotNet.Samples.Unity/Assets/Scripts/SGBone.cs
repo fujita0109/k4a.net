@@ -10,39 +10,34 @@ namespace SG
     //複数のクラスで共有する値なら、その値をクラス定義してインスタンスを共有するといい
     public class SGBone : MonoBehaviour
     {
-        public class SGJoint
+        private GameObject _root;
+
+        //ポインタにしたい
+        private GameObject _parent;
+
+        public SGBone(GameObject parent,string name)
         {
-            public JointType Type { set; get; }
-            public Transform Transform { set; get; } = null;
+            _parent = parent;
 
-            public string Name { set; get; } = string.Empty;
+            _root = new GameObject();
+            _root.name = name;
+            _root.transform.localScale = Vector3.one;
+            _root.transform.localPosition = Vector3.zero;
+            _root.SetActive(false);
 
-            public SGJoint(JointType jointType, Transform transform, string name)
-            {
-                Type = jointType;
-                Transform = transform;
-                Name = name;
-            }
+            //親の設定
+            _root.transform.SetParent(parent.transform);
+        }
+        //public List<SGBone> Children { set; get; } = new List<SGBone>();
+
+        public GameObject GetParent()
+        {
+            return _parent;
         }
 
-        public SGJoint Joint { set; get; } = null;
-
-        public SGBone Parent { set; get; } = null;
-        public List<SGBone> Children { set; get; } = new List<SGBone>();
-
-        public void SetJoint(JointType jointType, Transform transform, string name)
+        public GameObject MyGameObject()
         {
-            Joint = new SGJoint(jointType, transform, name);
-        }
-
-        public void SetParent(SGBone sgBone)
-        {
-            Parent = sgBone;
-        }
-
-        public void SetCildren(SGBone sgBone)
-        {
-            Children.Add(sgBone);
+            return this.gameObject;
         }
     }
 }
