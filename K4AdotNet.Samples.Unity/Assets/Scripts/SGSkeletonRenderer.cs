@@ -34,8 +34,6 @@ namespace SG
 
             CreateRoot();
             CreateJoints();
-            CreateHipFollowing();
-            //CreateRibsFollowing();
         }
 
         #region Render objects
@@ -45,6 +43,7 @@ namespace SG
         //2層
         static private GameObject _hipRoot;
         static private GameObject _ribsRoot;
+        static private GameObject _spineChestRoot;
 
         //hip～
         static private GameObject _leftThighRoot;
@@ -75,27 +74,44 @@ namespace SG
         static private GameObject _neckRoot;
         static private GameObject _headRoot;
 
+        //hand
+        static private GameObject _leftHandRoot;
+        static private GameObject _leftTipRoot;
+        static private GameObject _leftThumbRoot;
+
+        static private GameObject _rightHandRoot;
+        static private GameObject _rightTipRoot;
+        static private GameObject _rightThumbRoot;
+
+        //顔
+        static private GameObject _noseRoot;
+        static private GameObject _leftEyeRoot;
+        static private GameObject _rightEyeRoot;
+        static private GameObject _leftEarRoot;
+        static private GameObject _rightEarRoot;
+
         //もし階層構造が
-        private Dictionary<JointType, GameObject> _mapRootJoint = new Dictionary<JointType, GameObject>(){
+        private Dictionary<JointType, GameObject> _mapRootJoint = new Dictionary<JointType,GameObject>(){
             {JointType.Pelvis,_hipRoot },
             {JointType.SpineChest,_ribsRoot },
+            {JointType.SpineNavel,_spineChestRoot },
 
             {JointType.Neck,_neckRoot },
             {JointType.ClavicleLeft,_leftShoulderRoot },
             {JointType.ShoulderLeft,_leftUpperArmRoot },
             {JointType.ElbowLeft,_leftForearmRoot },
             {JointType.WristLeft,_leftWristRoot },
-           // {JointType.HandLeft },
-            //{JointType.HandTipLeft},
-            //{JointType.ThumbLeft},
+            {JointType.HandLeft ,_leftHandRoot},
+            {JointType.HandTipLeft,_leftTipRoot},
+            {JointType.ThumbLeft,_leftThumbRoot},
 
             {JointType.ClavicleRight,_rightShoulderRoot },
             {JointType.ShoulderRight,_rightUpperArmRoot },
             {JointType.ElbowRight,_rightForearmRoot },
             {JointType.WristRight,_rightWristRoot },
-            //{JointType.HandRight },
-            //{JointType.HandTipRight},
-            //{JointType.ThumbRight },
+            {JointType.HandRight ,_rightHandRoot},
+            {JointType.HandTipRight,_rightTipRoot},
+            {JointType.ThumbRight,_rightThumbRoot },
 
             {JointType.HipLeft,_leftThighRoot },
             {JointType.KneeLeft,_leftKneeRoot },
@@ -110,11 +126,11 @@ namespace SG
             {JointType.Head,_headRoot },
 
             //顔部分
-            //{JointType.Nose},
-            //{JointType.EyeLeft,_leftWristRoot },
-            //{JointType.EarLeft,_leftWristRoot },
-            //{JointType.EyeRight,_leftWristRoot },
-            //{JointType.EarRight,_leftWristRoot },
+            {JointType.Nose,_noseRoot},
+            {JointType.EyeLeft,_leftEyeRoot },
+            {JointType.EarLeft,_leftEarRoot },
+            {JointType.EyeRight,_rightEyeRoot },
+            {JointType.EarRight,_rightEarRoot },
         };
 
         //キーと値のペアの読み取り専用ジェネリック コレクションを表す
@@ -181,9 +197,11 @@ namespace SG
                         //joint.transform.parent = _root.transform;
 
                         //親の指定
+                        //mapの値がnull
                         var jointRoot = _mapRootJoint[jt];
 
-                        joint.transform.SetParent(jointRoot.transform);
+                        //joint.transform.SetParent(jointRoot.transform);
+                        joint.transform.parent = jointRoot.transform;
 
                         //joint.transform.localScale = 0.075f * Vector3.one;
                         joint.transform.localScale = (0.075f * Vector3.one) * 0.5f;
@@ -218,15 +236,6 @@ namespace SG
                 _joints[jt].GetComponent<Renderer>().material.color = color;
         }
 
-
-        private void CreateHipFollowing()
-        {
-            SGBone hip = new SGBone();
-
-
-
-        }
-
         private static void CreateBones(ICollection<SGBone> list, params JointType[] childJoints)
         {
             foreach (var joint in childJoints)
@@ -238,7 +247,7 @@ namespace SG
         //=========================================
         //=========================================
         //Bone作成
-        /*
+        
         private void CreateBones()
         {
             var bones = new List<Bone>();
@@ -277,8 +286,6 @@ namespace SG
 
             _head = head.transform;
         }
-
-         */
         //========================================
         //========================================
 
@@ -375,7 +382,7 @@ namespace SG
         private void CreateRoot()
         {
             //hip以下のroot
-            SetRootChild(ref _hipRoot, ref _root, "_hip:root");
+            SetRootChild(ref _hipRoot, ref _root, "hip:root");
             //left
             SetRootChild(ref _leftThighRoot, ref _hipRoot, "leftThigh:root");
             SetRootChild(ref _leftKneeRoot, ref _leftThighRoot, "leftKnee:root");
@@ -388,20 +395,37 @@ namespace SG
             SetRootChild(ref _rightToeRoot, ref _rightAnkleRoot, "rightThigh:root");
 
             //ribs以下のroot
-            SetRootChild(ref _ribsRoot, ref _root, "_ribs:root");
+            SetRootChild(ref _ribsRoot, ref _root, "ribs:root");
             //left
             SetRootChild(ref _leftShoulderRoot, ref _ribsRoot, "leftShoulder:root");
             SetRootChild(ref _leftUpperArmRoot, ref _leftShoulderRoot, "leftUpperArm:root");
             SetRootChild(ref _leftForearmRoot, ref _leftUpperArmRoot, "leftForearm:root");
             SetRootChild(ref _leftWristRoot, ref _leftForearmRoot, "leftWrist:root");
+            SetRootChild(ref _leftHandRoot, ref _leftWristRoot, "leftHandRoot:root");
+            SetRootChild(ref _leftTipRoot, ref _leftWristRoot, "leftTipRoot:root");
+            SetRootChild(ref _leftThumbRoot, ref _leftWristRoot, "leftThumbRoot:root");
+
             //right
             SetRootChild(ref _rightShoulderRoot, ref _ribsRoot, "rightShoulder:root");
             SetRootChild(ref _rightUpperArmRoot, ref _rightShoulderRoot, "rightUpperArm:root");
             SetRootChild(ref _rightForearmRoot, ref _rightUpperArmRoot, "rightForearm:root");
             SetRootChild(ref _rightWristRoot, ref _rightForearmRoot, "rightWrist:root");
+            SetRootChild(ref _rightHandRoot, ref _rightWristRoot, "rightHandRoot:root");
+            SetRootChild(ref _rightTipRoot, ref _rightWristRoot, "rightTipRoot:root");
+            SetRootChild(ref _rightThumbRoot, ref _rightWristRoot, "rightThumbRoot:root");
+
             //neck
             SetRootChild(ref _neckRoot, ref _ribsRoot, "neckRoot:root");
             SetRootChild(ref _headRoot, ref _neckRoot, "headRoot:root");
+
+            //顔
+            SetRootChild(ref _noseRoot, ref _headRoot, "noseRoot:root");
+            SetRootChild(ref _leftEyeRoot, ref _headRoot, "leftEyeRoot:root");
+            SetRootChild(ref _leftEarRoot, ref _headRoot, "leftEarRoot:root");
+            SetRootChild(ref _rightEyeRoot, ref _headRoot, "rightEyeRoot:root");
+            SetRootChild(ref _rightEarRoot, ref _headRoot, "rightEarRoot:root");
+
+            SetRootChild(ref _spineChestRoot, ref _root, "spineChestRoot:root");
         }
     }
 }
